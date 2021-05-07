@@ -1,0 +1,21 @@
+GET http://localhost:8000/api/v1/users
+
+###
+
+POST http://localhost:8000/api/v1/users
+Content-Type: application/json
+
+{
+    "name":"Bidur",
+    "password":"password"
+}
+
+###
+
+POST http://localhost:8000/api/v1/user/login
+Content-Type: application/json
+
+{
+    "name":"Bidur",
+    "password":"passwod"
+}
