@@ -20,23 +20,26 @@ app.use(
 
 app.use(cors());
 
-const api = require("./src/routes/routes");
-const login = require("./src/routes/login");
+// const api = require("./src/routes/routes");
+// const login = require("./src/routes/login");
 
-app.use("/api/v1", api);
+// app.use("/api/v1", api);
 
-app.use("/api/v1", login);
+// app.use("/api/v1", login);
 
-if (
-  process.env.NODE_ENV === "production" ||
-  process.env.NODE_ENV === "staging"
-) {
-  app.use(express.static(path.join(__dirname, "client/build")));
+app.use("/api/v1", require("./src/users"));
+app.use("/api/v1", require("./src/products"));
 
-  app.get("*", function (req, res) {
-    res.sendFile(path.join(__dirname, "client/build", "index.html"));
-  });
-}
+// if (
+//   process.env.NODE_ENV === "production" ||
+//   process.env.NODE_ENV === "staging"
+// ) {
+//   app.use(express.static(path.join(__dirname, "client/build")));
+
+//   app.get("*", function (req, res) {
+//     res.sendFile(path.join(__dirname, "client/build", "index.html"));
+//   });
+// }
 
 // Catch any bad requests
 app.get("*", (req, res) => {

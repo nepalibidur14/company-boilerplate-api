@@ -1,26 +1,26 @@
-const express = require("express");
-const router = express.Router();
-const bcrypt = require("bcrypt");
-const controllers = require("../controllers/controller");
+const router = require("express").Router();
 
-const users = [
-  {
-    name: "bidur",
-  },
-];
+const { UserModels } = require("../../config/database");
+
+const bcrypt = require("bcrypt");
 
 router.get("/users", (req, res) => {
-  res.json(users);
+  res.json();
 });
 
 router.post("/users", async (req, res) => {
+  console.log("sdfnjfnjfjdfnd");
+
   try {
-    const salt = await bcrypt.genSalt();
-    hashPassword = await bcrypt.hash(req.body.password, salt);
-    const user = { name: req.body.name, password: hashPassword };
-    users.push(user);
-    res.status(201).send();
+    const hashPassword = await bcrypt.hash(req.body.password, 10);
+    UserModels.create({
+      username: req.body.username,
+      password: hashPassword,
+    }).then((user) => {
+      res.status(201).send("User created successfully");
+    });
   } catch (err) {
+    console.log(err);
     res.status(500).send();
   }
 });
