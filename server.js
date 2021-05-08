@@ -2,6 +2,7 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const cors = require("cors");
 const path = require("path");
+const passport = require("passport");
 
 const app = express();
 const port = process.env.port || 8000;
@@ -19,6 +20,9 @@ app.use(
 );
 
 app.use(cors());
+app.use(passport.initialize());
+app.use(passport.session());
+require("../portfolio-api/src/users/auth");
 
 // const api = require("./src/routes/routes");
 // const login = require("./src/routes/login");

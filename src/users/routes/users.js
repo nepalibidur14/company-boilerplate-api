@@ -3,14 +3,13 @@ const router = require("express").Router();
 const { UserModels } = require("../../config/database");
 
 const bcrypt = require("bcrypt");
+const passport = require("passport");
 
 router.get("/users", (req, res) => {
   res.json();
 });
 
 router.post("/users", async (req, res) => {
-  console.log("sdfnjfnjfjdfnd");
-
   try {
     const hashPassword = await bcrypt.hash(req.body.password, 10);
     UserModels.create({
@@ -25,19 +24,22 @@ router.post("/users", async (req, res) => {
   }
 });
 
-router.post("/user/login", async (req, res) => {
-  const user = users.find((user) => user.name === req.body.name);
-  if (user == null) {
-    return res.status(400).send("cannot find the user");
-  }
-  try {
-    if (await bcrypt.compare(req.body.password, user.password)) {
-      res.send("success");
-    } else {
-      res.send("Not allowed");
+router.post("/user/login", async (req, res, next) => {
+  await passport.authenticate(
+    "admin-login",
+    { session: true },
+    (err, passportUser, info) => {
+      if (err) {
+        res.status(500).send("Error!");
+        return;
+      }
+      if (passportUser) {
+        const user = passportUser;
+        return res.send({ success: true, user: user });
+      } else {
+        return res.send(info);
+      }
     }
-  } catch {
-    res.status(500).send();
-  }
+  )(req, res, next);
 });
 module.exports = router;
