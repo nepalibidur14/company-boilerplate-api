@@ -1,11 +1,11 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const cors = require("cors");
-const path = require("path");
 const passport = require("passport");
 
 const app = express();
 const port = process.env.port || 8000;
+const baseUrl = "";
 
 app.use((req, res, next) => {
   console.log(`Request_Endpoint: ${req.method} ${req.url}`);
@@ -18,32 +18,20 @@ app.use(
     extended: true,
   })
 );
+const path = require("path");
 
 app.use(cors());
+app.use((req, res, next) => {
+  req.apiUrl = req.protocol + "://" + req.headers.host + baseUrl + "/";
+  next();
+});
 app.use(passport.initialize());
 app.use(passport.session());
 require("../portfolio-api/src/users/auth");
 
-// const api = require("./src/routes/routes");
-// const login = require("./src/routes/login");
-
-// app.use("/api/v1", api);
-
-// app.use("/api/v1", login);
-
 app.use("/api/v1", require("./src/users"));
 app.use("/api/v1", require("./src/products"));
-
-// if (
-//   process.env.NODE_ENV === "production" ||
-//   process.env.NODE_ENV === "staging"
-// ) {
-//   app.use(express.static(path.join(__dirname, "client/build")));
-
-//   app.get("*", function (req, res) {
-//     res.sendFile(path.join(__dirname, "client/build", "index.html"));
-//   });
-// }
+app.use(baseUrl + "/temp", express.static("temp"));
 
 // Catch any bad requests
 app.get("*", (req, res) => {

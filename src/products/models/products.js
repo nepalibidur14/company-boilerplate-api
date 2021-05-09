@@ -18,5 +18,8 @@ module.exports = (sequelize, type) => {
     price: {
       type: type.STRING,
     },
+    file: {
+      type: type.STRING,
+    },
   });
 };
