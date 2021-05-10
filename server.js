@@ -18,13 +18,13 @@ app.use(
     extended: true,
   })
 );
-const path = require("path");
 
 app.use(cors());
 app.use((req, res, next) => {
   req.apiUrl = req.protocol + "://" + req.headers.host + baseUrl + "/";
   next();
 });
+app.use("/setup", require("./src/config/setup"));
 app.use(passport.initialize());
 app.use(passport.session());
 require("../portfolio-api/src/users/auth");
