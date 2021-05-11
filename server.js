@@ -29,7 +29,7 @@ app.use((req, res, next) => {
 app.use("/setup", require("./src/config/setup"));
 app.use(passport.initialize());
 app.use(passport.session());
-require("../portfolio-api/src/users/auth");
+require("./src/users/auth");
 
 app.use("/api/v1", require("./src/users"));
 app.use("/api/v1", require("./src/products"));
