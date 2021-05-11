@@ -6,7 +6,7 @@ const dotenv = require("dotenv");
 dotenv.config();
 
 const app = express();
-const port = process.env.PORT || 8182;
+const port = process.env.PORT || 8000;
 const baseUrl = "";
 
 app.use((req, res, next) => {
